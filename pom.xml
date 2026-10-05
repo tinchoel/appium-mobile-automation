@@ -19,7 +19,7 @@
         <dependency>
             <groupId>io.appium</groupId>
             <artifactId>java-client</artifactId>
-            <version>9.5.0</version>
+            <version>10.1.1</version>
         </dependency>
 
         <!-- JUnit 5 -->
