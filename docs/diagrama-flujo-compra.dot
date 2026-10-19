@@ -1,0 +1,36 @@
+digraph G {
+  rankdir=TB; bgcolor="white"; nodesep=0.35; ranksep=0.4;
+  node [fontname="Helvetica", fontsize=12, shape=box, style="rounded,filled", fillcolor="#EAF2FB", color="#2F6DB5"];
+  edge [fontname="Helvetica", fontsize=10, color="#555555"];
+  inicio [label="Inicio: se abre la app", shape=oval, fillcolor="#DFF3E3", color="#2E8B57"];
+  fin [label="Fin", shape=oval, fillcolor="#DFF3E3", color="#2E8B57"];
+  cat [label="Catálogo de productos"];
+  det [label="Detalle del producto"];
+  add [label="Add to cart"];
+  cart [label="Carrito"];
+  proc [label="Proceed To Checkout"];
+  g1 [label="¿Hay sesión\niniciada?", shape=diamond, fillcolor="#FFF4D6", color="#D49A00"];
+  login [label="Pantalla de Login"];
+  g2 [label="¿Credenciales\nválidas?", shape=diamond, fillcolor="#FFF4D6", color="#D49A00"];
+  err [label="Mensaje de error\n(usuario vacío o bloqueado)", fillcolor="#FBE3E3", color="#C0392B"];
+  ship [label="Envío: dirección de entrega"];
+  pay [label="Pago: datos de la tarjeta"];
+  rev [label="Revisión del pedido"];
+  place [label="Place Order"];
+  done [label="Checkout Complete"];
+  back [label="Continue Shopping\n(vuelve al catálogo)"];
+  menu [label="Menú ☰ → Log Out"];
+  g3 [label="¿Confirma el\ndiálogo?", shape=diamond, fillcolor="#FFF4D6", color="#D49A00"];
+  login2 [label="Pantalla de Login"];
+  inicio -> cat -> det -> add -> cart -> proc -> g1;
+  g1 -> login [label="No"];
+  g1 -> ship [label="Sí"];
+  login -> g2;
+  g2 -> err [label="No"];
+  err -> login;
+  g2 -> ship [label="Sí"];
+  ship -> pay -> rev -> place -> done -> back -> menu -> g3;
+  g3 -> back [label="Cancel"];
+  g3 -> login2 [label="Logout"];
+  login2 -> fin;
+}
