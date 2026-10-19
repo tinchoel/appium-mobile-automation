@@ -3,6 +3,7 @@ import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.AndroidDriver;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -14,7 +15,9 @@ import java.time.Duration;
  * Clase base de todos los tests: crea y cierra la sesión de Appium y reúne los
  * métodos de ayuda compartidos (esperas explícitas, escritura y scroll).
  * Los tests solo extienden esta clase y escriben el flujo.
+ * Lleva la etiqueta Android, que heredan todas las clases de prueba (JUnit 5 hereda las etiquetas de la clase padre).
  */
+@Tag("Android")
 public abstract class BaseTest {
 
     protected static final String ID_PREFIX = "com.saucelabs.mydemoapp.android:id/";

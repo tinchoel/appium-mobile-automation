@@ -1,44 +1,61 @@
 import io.appium.java_client.AppiumBy;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-/**
- * Pruebas de Login: un caso exitoso y dos inválidos (usuario bloqueado y usuario vacío).
- */
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+@Tag("Login")
+@DisplayName("Login")
 public class LoginTest extends BaseTest {
 
     @Test
+    @DisplayName("Login exitoso lleva al catálogo")
     void loginExitosoLlevaAlCatalogo() {
+        // Arrange: abrir la pantalla de login desde el menú
         irAlLogin();
+
+        // Act: iniciar sesión y abrir el menú
         completarLogin(USUARIO_VALIDO, CLAVE);
-
         esperarTexto(id(ID_TITULO), "Products");
-        Assertions.assertTrue(esperarVisible(id("productRV")).isDisplayed(),
-                "Después del login debe verse el catálogo");
-
-        // Con sesión iniciada el menú ofrece Log Out en lugar de Log In
+        boolean catalogoVisible = esperarVisible(id("productRV")).isDisplayed();
         abrirMenu();
-        Assertions.assertTrue(esperarVisible(AppiumBy.accessibilityId("Logout Menu Item")).isDisplayed(),
-                "Con sesión iniciada debe aparecer la opción Log Out");
+        boolean logoutVisible = esperarVisible(AppiumBy.accessibilityId("Logout Menu Item")).isDisplayed();
+
+        // Assert
+        assertAll("Login exitoso",
+                () -> assertTrue(catalogoVisible, "Después del login debe verse el catálogo"),
+                () -> assertTrue(logoutVisible, "Con sesión iniciada debe aparecer la opción Log Out"));
     }
 
     @Test
+    @DisplayName("Login con usuario bloqueado muestra error")
     void loginConUsuarioBloqueadoMuestraError() {
+        // Arrange
         irAlLogin();
-        completarLogin(USUARIO_BLOQUEADO, CLAVE);
 
+        // Act
+        completarLogin(USUARIO_BLOQUEADO, CLAVE);
         esperarTexto(id("passwordErrorTV"), "Sorry this user has been locked out.");
-        Assertions.assertTrue(driver.findElement(id("loginBtn")).isDisplayed(),
+
+        // Assert: el mensaje ya se esperó arriba; además se permanece en el login
+        assertTrue(driver.findElement(id("loginBtn")).isDisplayed(),
                 "Con un usuario bloqueado se debe permanecer en la pantalla de login");
     }
 
     @Test
+    @DisplayName("Login sin usuario muestra error")
     void loginSinUsuarioMuestraError() {
+        // Arrange
         irAlLogin();
-        completarLogin("", "");
 
+        // Act
+        completarLogin("", "");
         esperarTexto(id("nameErrorTV"), "Username is required");
-        Assertions.assertTrue(driver.findElement(id("loginBtn")).isDisplayed(),
+
+        // Assert
+        assertTrue(driver.findElement(id("loginBtn")).isDisplayed(),
                 "Sin usuario se debe permanecer en la pantalla de login");
     }
 }

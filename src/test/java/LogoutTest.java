@@ -1,22 +1,30 @@
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-/**
- * Prueba de Logout: iniciar sesión, cerrarla y comprobar que la app vuelve a la pantalla de Login.
- */
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+@Tag("Logout")
+@DisplayName("Logout")
 public class LogoutTest extends BaseTest {
 
     @Test
+    @DisplayName("Confirmar el logout vuelve a la pantalla de Login")
     void logoutVuelveALaPantallaDeLogin() {
+        // Arrange: usuario con sesión iniciada
         loginExitoso();
-        hacerLogout();
 
-        // Al confirmar el logout la app muestra la pantalla de Login
-        Assertions.assertTrue(esperarVisible(id("loginBtn")).isDisplayed(),
-                "Después del logout debe verse el botón Login");
-        Assertions.assertTrue(esperarVisible(id("nameET")).isDisplayed(),
-                "Después del logout debe verse el campo Username");
-        Assertions.assertTrue(esperarVisible(id("passwordET")).isDisplayed(),
-                "Después del logout debe verse el campo Password");
+        // Act: Menú -> Log Out -> confirmar
+        hacerLogout();
+        boolean botonLogin = esperarVisible(id("loginBtn")).isDisplayed();
+        boolean campoUsuario = esperarVisible(id("nameET")).isDisplayed();
+        boolean campoClave = esperarVisible(id("passwordET")).isDisplayed();
+
+        // Assert
+        assertAll("Pantalla de Login después del logout",
+                () -> assertTrue(botonLogin, "Debe verse el botón Login"),
+                () -> assertTrue(campoUsuario, "Debe verse el campo Username"),
+                () -> assertTrue(campoClave, "Debe verse el campo Password"));
     }
 }

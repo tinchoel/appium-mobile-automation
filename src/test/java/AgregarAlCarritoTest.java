@@ -1,13 +1,15 @@
 import io.appium.java_client.AppiumBy;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * Avance 2.4: Listado -> Backpack -> Detalle -> Agregar al carrito -> Carrito -> Verificar.
- */
+@Tag("Cart")
+@DisplayName("Carrito")
 public class AgregarAlCarritoTest extends BaseTest {
 
     private static final String PRODUCTO = "Backpack";
@@ -16,33 +18,49 @@ public class AgregarAlCarritoTest extends BaseTest {
     private static final By IMAGEN_PRODUCTO = AppiumBy.accessibilityId("Product Image");
     private static final By BOTON_AGREGAR = AppiumBy.accessibilityId("Tap to add product to cart");
     private static final By ACCESO_CARRITO = AppiumBy.accessibilityId("View cart");
-    private static final By NOMBRE_EN_CARRITO = AppiumBy.id(ID_PREFIX + "titleTV");
 
     @Test
-    void agregarBackpackAlCarrito() {
-        // Esperar el listado de productos
-        esperarVisible(TITULO_PANTALLA);
+    @Tag("Products")
+    @DisplayName("El detalle del producto muestra el botón Add to cart disponible")
+    void detalleMuestraBotonAgregarDisponible() {
+        // Arrange: abrir el detalle de la primera Backpack
+        abrirDetalleDeBackpack();
 
-        // Seleccionar el primer producto (Backpack)
-        tap(IMAGEN_PRODUCTO);
-
-        // Detalle: esperar por el texto (productTV también existe en el listado) y validar
-        esperarTexto(TITULO_PANTALLA, PRODUCTO);
+        // Act
         String nombreDetalle = driver.findElement(TITULO_PANTALLA).getText();
-        assertTrue(nombreDetalle.contains(PRODUCTO), "No se ve el detalle de Backpack. Se vio: " + nombreDetalle);
-        System.out.println("Detalle: " + nombreDetalle);
-
-        // Verificar que el botón Agregar al carrito esté disponible y hacer click
         WebElement agregar = esperarClickable(BOTON_AGREGAR);
-        assertTrue(agregar.isDisplayed() && agregar.isEnabled(), "El botón Agregar al carrito no está disponible");
-        System.out.println("Botón agregar al carrito disponible");
-        agregar.click();
 
-        // Abrir el carrito y verificar el producto
+        // Assert
+        assertAll("Detalle del producto",
+                () -> assertTrue(nombreDetalle.contains(PRODUCTO), "No se ve el detalle de Backpack. Se vio: " + nombreDetalle),
+                () -> assertTrue(agregar.isDisplayed() && agregar.isEnabled(), "El botón Add to cart no está disponible"));
+    }
+
+    @Test
+    @DisplayName("El producto agregado aparece en el carrito")
+    void productoAgregadoApareceEnElCarrito() {
+        // Arrange
+        abrirDetalleDeBackpack();
+
+        // Act: agregar al carrito y abrir el carrito
+        tap(BOTON_AGREGAR);
         tap(ACCESO_CARRITO);
-        esperarTexto(NOMBRE_EN_CARRITO, PRODUCTO);
-        String nombreCarrito = driver.findElement(NOMBRE_EN_CARRITO).getText();
-        assertTrue(nombreCarrito.contains(PRODUCTO), "El carrito no muestra Backpack. Se vio: " + nombreCarrito);
-        System.out.println("Carrito: " + nombreCarrito);
+        esperarTexto(id("titleTV"), PRODUCTO);
+        String nombreCarrito = driver.findElement(id("titleTV")).getText();
+        String items = esperarVisible(id("itemsTV")).getText();
+        String total = esperarVisible(id("totalPriceTV")).getText();
+
+        // Assert
+        assertAll("Carrito con un producto",
+                () -> assertTrue(nombreCarrito.contains(PRODUCTO), "El carrito no muestra Backpack. Se vio: " + nombreCarrito),
+                () -> assertTrue(items.contains("1"), "El carrito debe tener 1 ítem. Se vio: " + items),
+                () -> assertTrue(total.contains("$"), "El total debe mostrar el precio. Se vio: " + total));
+    }
+
+    /** Paso de preparación compartido: catálogo -> detalle de la primera Backpack. */
+    private void abrirDetalleDeBackpack() {
+        esperarVisible(TITULO_PANTALLA);
+        tap(IMAGEN_PRODUCTO);
+        esperarTexto(TITULO_PANTALLA, PRODUCTO); // productTV también existe en el listado: se espera por el texto
     }
 }
