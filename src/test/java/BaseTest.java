@@ -19,6 +19,12 @@ public abstract class BaseTest {
 
     protected static final String ID_PREFIX = "com.saucelabs.mydemoapp.android:id/";
 
+    protected static final String USUARIO_VALIDO = "bod@example.com";
+    protected static final String USUARIO_BLOQUEADO = "alice@example.com";
+    protected static final String CLAVE = "10203040";
+
+    protected static final String ID_TITULO = "productTV";
+
     protected AndroidDriver driver;
     protected WebDriverWait wait;
 
@@ -85,6 +91,47 @@ public abstract class BaseTest {
         if (driver.isKeyboardShown()) {
             driver.hideKeyboard();
         }
+    }
+
+    // ---------- Menú, login y logout (compartidos por varios tests) ----------
+
+    /** Abre el menú lateral (☰) desde cualquier pantalla que tenga el encabezado. */
+    protected void abrirMenu() {
+        tap(id("menuIV"));
+    }
+
+    /** Menú → Log In. Deja abierta la pantalla de login. */
+    protected void irAlLogin() {
+        abrirMenu();
+        tap(AppiumBy.accessibilityId("Login Menu Item"));
+        esperarVisible(id("loginBtn"));
+    }
+
+    /** Escribe usuario y contraseña en la pantalla de login y toca Login. */
+    protected void completarLogin(String usuario, String clave) {
+        if (!usuario.isEmpty()) {
+            escribir(id("nameET"), usuario);
+        }
+        if (!clave.isEmpty()) {
+            escribir(id("passwordET"), clave);
+        }
+        ocultarTeclado();
+        tap(id("loginBtn"));
+    }
+
+    /** Login completo con el usuario válido; termina en el catálogo. */
+    protected void loginExitoso() {
+        irAlLogin();
+        completarLogin(USUARIO_VALIDO, CLAVE);
+        esperarTexto(id(ID_TITULO), "Products");
+    }
+
+    /** Menú → Log Out → confirmar en el diálogo. */
+    protected void hacerLogout() {
+        abrirMenu();
+        tap(AppiumBy.accessibilityId("Logout Menu Item"));
+        esperarTexto(id("alertTitle"), "Log Out");
+        tap(AppiumBy.id("android:id/button1"));
     }
 
     // ---------- Scroll ----------
