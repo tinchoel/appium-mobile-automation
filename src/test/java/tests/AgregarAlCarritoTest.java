@@ -1,3 +1,5 @@
+package tests;
+
 import io.appium.java_client.AppiumBy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;

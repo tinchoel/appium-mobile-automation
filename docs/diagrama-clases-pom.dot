@@ -1,0 +1,79 @@
+digraph UML {
+  rankdir=BT; bgcolor="white"; nodesep=0.5; ranksep=0.8; splines=true;
+  node [shape=plaintext, fontname="Helvetica", fontsize=11];
+  edge [fontname="Helvetica", fontsize=10, color="#444444"];
+
+  BaseScreen [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#EAF2FB" COLOR="#2F6DB5">
+      <TR><TD ALIGN="CENTER" BORDER="1" SIDES="B"><I>«abstract»</I><BR/><B>BaseScreen</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BORDER="1" SIDES="B"># driver : AndroidDriver<BR ALIGN="LEFT"/># wait : WebDriverWait<BR ALIGN="LEFT"/># ID_PREFIX : String<BR ALIGN="LEFT"/></TD></TR>
+      <TR><TD ALIGN="LEFT"># BaseScreen(driver, wait)<BR ALIGN="LEFT"/># id(name) : By<BR ALIGN="LEFT"/># waitVisible(locator) : WebElement<BR ALIGN="LEFT"/># waitClickable(locator) : WebElement<BR ALIGN="LEFT"/># waitForText(locator, text) : void<BR ALIGN="LEFT"/># tap(locator) : void<BR ALIGN="LEFT"/># type(locator, text) : void<BR ALIGN="LEFT"/># hideKeyboard() : void<BR ALIGN="LEFT"/># scrollToText(text) : void<BR ALIGN="LEFT"/></TD></TR>
+    </TABLE>>];
+
+  LoginScreen [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#EAF2FB" COLOR="#2F6DB5">
+      <TR><TD ALIGN="CENTER" BORDER="1" SIDES="B"><B>LoginScreen</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BORDER="1" SIDES="B">- USERNAME_FIELD : By<BR ALIGN="LEFT"/>- PASSWORD_FIELD : By<BR ALIGN="LEFT"/>- LOGIN_BUTTON : By<BR ALIGN="LEFT"/></TD></TR>
+      <TR><TD ALIGN="LEFT">+ LoginScreen(driver, wait)<BR ALIGN="LEFT"/>+ enterUsername(username) : void<BR ALIGN="LEFT"/>+ enterPassword(password) : void<BR ALIGN="LEFT"/>+ clickLogin() : void<BR ALIGN="LEFT"/>+ login(username, password) : void<BR ALIGN="LEFT"/></TD></TR>
+    </TABLE>>];
+
+  HomeScreen [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#EAF2FB" COLOR="#2F6DB5">
+      <TR><TD ALIGN="CENTER" BORDER="1" SIDES="B"><B>HomeScreen</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BORDER="1" SIDES="B">- TITLE : By<BR ALIGN="LEFT"/>- MENU_BUTTON : By<BR ALIGN="LEFT"/>- LOGIN_MENU_ITEM : By<BR ALIGN="LEFT"/>- ADD_TO_CART_BUTTON : By<BR ALIGN="LEFT"/>- CART_ICON : By<BR ALIGN="LEFT"/></TD></TR>
+      <TR><TD ALIGN="LEFT">+ HomeScreen(driver, wait)<BR ALIGN="LEFT"/>+ goToLogin() : void<BR ALIGN="LEFT"/>+ isProductScreenDisplayed() : boolean<BR ALIGN="LEFT"/>+ getProductTitle() : String<BR ALIGN="LEFT"/>+ selectProduct(productName) : void<BR ALIGN="LEFT"/>+ addProductToCart(productName) : void<BR ALIGN="LEFT"/>+ clickCart() : void<BR ALIGN="LEFT"/></TD></TR>
+    </TABLE>>];
+
+  CartScreen [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#EAF2FB" COLOR="#2F6DB5">
+      <TR><TD ALIGN="CENTER" BORDER="1" SIDES="B"><B>CartScreen</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BORDER="1" SIDES="B">- TOTAL_ITEMS : By<BR ALIGN="LEFT"/>- CHECKOUT_BUTTON : By<BR ALIGN="LEFT"/></TD></TR>
+      <TR><TD ALIGN="LEFT">+ CartScreen(driver, wait)<BR ALIGN="LEFT"/>+ isProductInCart(productName) : boolean<BR ALIGN="LEFT"/>+ getTotalItems() : String<BR ALIGN="LEFT"/>+ proceedToCheckout() : void<BR ALIGN="LEFT"/></TD></TR>
+    </TABLE>>];
+
+  CheckoutScreen [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#F4F4F4" COLOR="#888888" STYLE="DASHED">
+      <TR><TD ALIGN="CENTER" BORDER="1" SIDES="B"><B>CheckoutScreen</B><BR/><I>(se implementa en un próximo avance)</I></TD></TR>
+      <TR><TD ALIGN="LEFT" BORDER="1" SIDES="B">- campos de envío y pago : By<BR ALIGN="LEFT"/>- PAYMENT_BUTTON : By<BR ALIGN="LEFT"/></TD></TR>
+      <TR><TD ALIGN="LEFT">+ enterShippingAddress(...) : void<BR ALIGN="LEFT"/>+ clickToPayment() : void<BR ALIGN="LEFT"/>+ enterPaymentDetails(...) : void<BR ALIGN="LEFT"/>+ clickReviewOrder() : void<BR ALIGN="LEFT"/>+ getShippingName() : String<BR ALIGN="LEFT"/>+ getTotalAmount() : String<BR ALIGN="LEFT"/>+ clickPlaceOrder() : void<BR ALIGN="LEFT"/>+ getConfirmationTitle() : String<BR ALIGN="LEFT"/></TD></TR>
+    </TABLE>>];
+
+  BaseTest [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#FFF4D6" COLOR="#D49A00">
+      <TR><TD ALIGN="CENTER" BORDER="1" SIDES="B"><I>«abstract»</I><BR/><B>BaseTest</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BORDER="1" SIDES="B"># driver : AndroidDriver<BR ALIGN="LEFT"/># wait : WebDriverWait<BR ALIGN="LEFT"/></TD></TR>
+      <TR><TD ALIGN="LEFT">~ iniciarSesion() : void  «@BeforeEach»<BR ALIGN="LEFT"/>~ cerrarSesion() : void  «@AfterEach»<BR ALIGN="LEFT"/></TD></TR>
+    </TABLE>>];
+
+  Tests [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#FFF4D6" COLOR="#D49A00">
+      <TR><TD ALIGN="CENTER" BORDER="1" SIDES="B"><B>Clases de prueba (JUnit 5)</B></TD></TR>
+      <TR><TD ALIGN="LEFT">FlujoPomTest, LoginTest, LogoutTest,<BR ALIGN="LEFT"/>CatalogoTest, AgregarAlCarritoTest,<BR ALIGN="LEFT"/>ScrollHastaProductoTest, CheckoutTest, ...<BR ALIGN="LEFT"/></TD></TR>
+    </TABLE>>];
+
+  DriverFactory [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#DFF3E3" COLOR="#2E8B57">
+      <TR><TD ALIGN="CENTER" BORDER="1" SIDES="B"><B>DriverFactory</B></TD></TR>
+      <TR><TD ALIGN="LEFT">+ crearOpciones() : UiAutomator2Options  «static»<BR ALIGN="LEFT"/>+ crearDriver() : AndroidDriver  «static»<BR ALIGN="LEFT"/></TD></TR>
+    </TABLE>>];
+
+  ConfigReader [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#DFF3E3" COLOR="#2E8B57">
+      <TR><TD ALIGN="CENTER" BORDER="1" SIDES="B"><B>ConfigReader</B></TD></TR>
+      <TR><TD ALIGN="LEFT">+ get(clave) : String  «static»<BR ALIGN="LEFT"/></TD></TR>
+    </TABLE>>];
+
+  // Herencia (triángulo vacío)
+  LoginScreen -> BaseScreen [arrowhead=empty];
+  HomeScreen -> BaseScreen [arrowhead=empty];
+  CartScreen -> BaseScreen [arrowhead=empty];
+  CheckoutScreen -> BaseScreen [arrowhead=empty, style=dashed];
+  Tests -> BaseTest [arrowhead=empty];
+
+  // Dependencias
+  Tests -> LoginScreen [style=dashed, arrowhead=vee, label="usa", constraint=false];
+  Tests -> HomeScreen [style=dashed, arrowhead=vee, constraint=false];
+  Tests -> CartScreen [style=dashed, arrowhead=vee, constraint=false];
+  BaseTest -> DriverFactory [style=dashed, arrowhead=vee, label="crea el driver", constraint=false];
+  DriverFactory -> ConfigReader [style=dashed, arrowhead=vee, label="lee", constraint=false];
+}

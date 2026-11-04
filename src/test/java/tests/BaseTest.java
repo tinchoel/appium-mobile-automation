@@ -1,3 +1,5 @@
+package tests;
+
 import config.DriverFactory;
 import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.AndroidDriver;
