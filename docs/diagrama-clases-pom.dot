@@ -7,13 +7,13 @@ digraph UML {
     <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#EAF2FB" COLOR="#2F6DB5">
       <TR><TD ALIGN="CENTER" BORDER="1" SIDES="B"><I>«abstract»</I><BR/><B>BaseScreen</B></TD></TR>
       <TR><TD ALIGN="LEFT" BORDER="1" SIDES="B"># driver : AndroidDriver<BR ALIGN="LEFT"/># wait : WebDriverWait<BR ALIGN="LEFT"/># ID_PREFIX : String<BR ALIGN="LEFT"/></TD></TR>
-      <TR><TD ALIGN="LEFT"># BaseScreen(driver, wait)<BR ALIGN="LEFT"/># id(name) : By<BR ALIGN="LEFT"/># waitVisible(locator) : WebElement<BR ALIGN="LEFT"/># waitClickable(locator) : WebElement<BR ALIGN="LEFT"/># waitForText(locator, text) : void<BR ALIGN="LEFT"/># tap(locator) : void<BR ALIGN="LEFT"/># type(locator, text) : void<BR ALIGN="LEFT"/># hideKeyboard() : void<BR ALIGN="LEFT"/># scrollToText(text) : void<BR ALIGN="LEFT"/></TD></TR>
+      <TR><TD ALIGN="LEFT"># BaseScreen(driver, wait)  «PageFactory.initElements»<BR ALIGN="LEFT"/># id(name) : By<BR ALIGN="LEFT"/># waitVisible(By | WebElement) : WebElement<BR ALIGN="LEFT"/># waitClickable(By | WebElement) : WebElement<BR ALIGN="LEFT"/># waitForText(By | WebElement, text) : void<BR ALIGN="LEFT"/># tap(By | WebElement) : void<BR ALIGN="LEFT"/># type(By | WebElement, text) : void<BR ALIGN="LEFT"/># textOf(element) : String<BR ALIGN="LEFT"/># hideKeyboard() : void<BR ALIGN="LEFT"/># scrollToText(text) : void<BR ALIGN="LEFT"/># scrollToId(idName) : void<BR ALIGN="LEFT"/></TD></TR>
     </TABLE>>];
 
   LoginScreen [label=<
     <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#EAF2FB" COLOR="#2F6DB5">
       <TR><TD ALIGN="CENTER" BORDER="1" SIDES="B"><B>LoginScreen</B></TD></TR>
-      <TR><TD ALIGN="LEFT" BORDER="1" SIDES="B">- USERNAME_FIELD : By<BR ALIGN="LEFT"/>- PASSWORD_FIELD : By<BR ALIGN="LEFT"/>- LOGIN_BUTTON : By<BR ALIGN="LEFT"/></TD></TR>
+      <TR><TD ALIGN="LEFT" BORDER="1" SIDES="B">«@AndroidFindBy»<BR ALIGN="LEFT"/>- usernameField : WebElement<BR ALIGN="LEFT"/>- passwordField : WebElement<BR ALIGN="LEFT"/>- loginButton : WebElement<BR ALIGN="LEFT"/></TD></TR>
       <TR><TD ALIGN="LEFT">+ LoginScreen(driver, wait)<BR ALIGN="LEFT"/>+ enterUsername(username) : void<BR ALIGN="LEFT"/>+ enterPassword(password) : void<BR ALIGN="LEFT"/>+ clickLogin() : void<BR ALIGN="LEFT"/>+ login(username, password) : void<BR ALIGN="LEFT"/></TD></TR>
     </TABLE>>];
 
@@ -27,15 +27,15 @@ digraph UML {
   CartScreen [label=<
     <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#EAF2FB" COLOR="#2F6DB5">
       <TR><TD ALIGN="CENTER" BORDER="1" SIDES="B"><B>CartScreen</B></TD></TR>
-      <TR><TD ALIGN="LEFT" BORDER="1" SIDES="B">- TOTAL_ITEMS : By<BR ALIGN="LEFT"/>- CHECKOUT_BUTTON : By<BR ALIGN="LEFT"/></TD></TR>
-      <TR><TD ALIGN="LEFT">+ CartScreen(driver, wait)<BR ALIGN="LEFT"/>+ isProductInCart(productName) : boolean<BR ALIGN="LEFT"/>+ getTotalItems() : String<BR ALIGN="LEFT"/>+ proceedToCheckout() : void<BR ALIGN="LEFT"/></TD></TR>
+      <TR><TD ALIGN="LEFT" BORDER="1" SIDES="B">«@AndroidFindBy»<BR ALIGN="LEFT"/>- productTitles : List&lt;WebElement&gt;<BR ALIGN="LEFT"/>- totalItems : WebElement<BR ALIGN="LEFT"/>- totalPrice : WebElement<BR ALIGN="LEFT"/>- checkoutButton : WebElement<BR ALIGN="LEFT"/></TD></TR>
+      <TR><TD ALIGN="LEFT">+ CartScreen(driver, wait)<BR ALIGN="LEFT"/>+ isProductInCart(productName) : boolean<BR ALIGN="LEFT"/>+ getTotalItems() : String<BR ALIGN="LEFT"/>+ getTotalPrice() : String<BR ALIGN="LEFT"/>+ proceedToCheckout() : void<BR ALIGN="LEFT"/></TD></TR>
     </TABLE>>];
 
   CheckoutScreen [label=<
-    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#F4F4F4" COLOR="#888888" STYLE="DASHED">
-      <TR><TD ALIGN="CENTER" BORDER="1" SIDES="B"><B>CheckoutScreen</B><BR/><I>(se implementa en un próximo avance)</I></TD></TR>
-      <TR><TD ALIGN="LEFT" BORDER="1" SIDES="B">- campos de envío y pago : By<BR ALIGN="LEFT"/>- PAYMENT_BUTTON : By<BR ALIGN="LEFT"/></TD></TR>
-      <TR><TD ALIGN="LEFT">+ enterShippingAddress(...) : void<BR ALIGN="LEFT"/>+ clickToPayment() : void<BR ALIGN="LEFT"/>+ enterPaymentDetails(...) : void<BR ALIGN="LEFT"/>+ clickReviewOrder() : void<BR ALIGN="LEFT"/>+ getShippingName() : String<BR ALIGN="LEFT"/>+ getTotalAmount() : String<BR ALIGN="LEFT"/>+ clickPlaceOrder() : void<BR ALIGN="LEFT"/>+ getConfirmationTitle() : String<BR ALIGN="LEFT"/></TD></TR>
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#EAF2FB" COLOR="#2F6DB5">
+      <TR><TD ALIGN="CENTER" BORDER="1" SIDES="B"><B>CheckoutScreen</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BORDER="1" SIDES="B">«@AndroidFindBy»<BR ALIGN="LEFT"/>- campos de envío y de pago : WebElement<BR ALIGN="LEFT"/>- paymentButton : WebElement<BR ALIGN="LEFT"/>- datos de la revisión : WebElement<BR ALIGN="LEFT"/>- completeTitle, thankYouMessage : WebElement<BR ALIGN="LEFT"/></TD></TR>
+      <TR><TD ALIGN="LEFT">+ CheckoutScreen(driver, wait)<BR ALIGN="LEFT"/>+ enterShippingAddress(...) : void<BR ALIGN="LEFT"/>+ clickToPayment() : void<BR ALIGN="LEFT"/>+ enterPaymentDetails(...) : void<BR ALIGN="LEFT"/>+ clickReviewOrder() : void<BR ALIGN="LEFT"/>+ getShippingName() / getShippingAddress() : String<BR ALIGN="LEFT"/>+ getShippingCity() / getShippingCountry() : String<BR ALIGN="LEFT"/>+ getCardHolder() / getItemCount() : String<BR ALIGN="LEFT"/>+ getTotalAmount() : String<BR ALIGN="LEFT"/>+ clickPlaceOrder() : void<BR ALIGN="LEFT"/>+ getConfirmationTitle() : String<BR ALIGN="LEFT"/>+ getThankYouMessage() : String<BR ALIGN="LEFT"/></TD></TR>
     </TABLE>>];
 
   BaseTest [label=<
@@ -48,7 +48,7 @@ digraph UML {
   Tests [label=<
     <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#FFF4D6" COLOR="#D49A00">
       <TR><TD ALIGN="CENTER" BORDER="1" SIDES="B"><B>Clases de prueba (JUnit 5)</B></TD></TR>
-      <TR><TD ALIGN="LEFT">FlujoPomTest, LoginTest, LogoutTest,<BR ALIGN="LEFT"/>CatalogoTest, AgregarAlCarritoTest,<BR ALIGN="LEFT"/>ScrollHastaProductoTest, CheckoutTest, ...<BR ALIGN="LEFT"/></TD></TR>
+      <TR><TD ALIGN="LEFT">CompraPomTest, FlujoPomTest, LoginTest,<BR ALIGN="LEFT"/>LogoutTest, CatalogoTest, AgregarAlCarritoTest,<BR ALIGN="LEFT"/>ScrollHastaProductoTest, CheckoutTest, ...<BR ALIGN="LEFT"/></TD></TR>
     </TABLE>>];
 
   DriverFactory [label=<
@@ -63,17 +63,16 @@ digraph UML {
       <TR><TD ALIGN="LEFT">+ get(clave) : String  «static»<BR ALIGN="LEFT"/></TD></TR>
     </TABLE>>];
 
-  // Herencia (triángulo vacío)
   LoginScreen -> BaseScreen [arrowhead=empty];
   HomeScreen -> BaseScreen [arrowhead=empty];
   CartScreen -> BaseScreen [arrowhead=empty];
-  CheckoutScreen -> BaseScreen [arrowhead=empty, style=dashed];
+  CheckoutScreen -> BaseScreen [arrowhead=empty];
   Tests -> BaseTest [arrowhead=empty];
 
-  // Dependencias
   Tests -> LoginScreen [style=dashed, arrowhead=vee, label="usa", constraint=false];
   Tests -> HomeScreen [style=dashed, arrowhead=vee, constraint=false];
   Tests -> CartScreen [style=dashed, arrowhead=vee, constraint=false];
+  Tests -> CheckoutScreen [style=dashed, arrowhead=vee, constraint=false];
   BaseTest -> DriverFactory [style=dashed, arrowhead=vee, label="crea el driver", constraint=false];
   DriverFactory -> ConfigReader [style=dashed, arrowhead=vee, label="lee", constraint=false];
 }

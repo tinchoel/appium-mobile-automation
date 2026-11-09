@@ -1,27 +1,39 @@
 package screens;
 
-import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.AndroidDriver;
-import org.openqa.selenium.By;
+import io.appium.java_client.pagefactory.AndroidFindBy;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Carrito de compras: productos agregados y acceso al checkout. */
+import java.util.List;
+
+/** Carrito de compras: productos agregados, totales y acceso al checkout. Elementos con Page Factory. */
 public class CartScreen extends BaseScreen {
 
-    private static final By TOTAL_ITEMS = AppiumBy.id(ID_PREFIX + "itemsTV");
-    private static final By CHECKOUT_BUTTON = AppiumBy.accessibilityId("Confirms products for checkout");
+    // Un nombre por cada producto del carrito: Page Factory también admite listas de elementos
+    @AndroidFindBy(id = ID_PREFIX + "titleTV")
+    private List<WebElement> productTitles;
+
+    @AndroidFindBy(id = ID_PREFIX + "itemsTV")
+    private WebElement totalItems;
+
+    @AndroidFindBy(id = ID_PREFIX + "totalPriceTV")
+    private WebElement totalPrice;
+
+    @AndroidFindBy(accessibility = "Confirms products for checkout")
+    private WebElement checkoutButton;
 
     public CartScreen(AndroidDriver driver, WebDriverWait wait) {
         super(driver, wait);
     }
 
-    /** true si el carrito muestra un producto con ese nombre. */
+    /** true si el carrito muestra un producto con ese nombre dentro del tiempo de espera. */
     public boolean isProductInCart(String productName) {
         try {
-            waitVisible(AppiumBy.androidUIAutomator(
-                    "new UiSelector().resourceId(\"" + ID_PREFIX + "titleTV\").text(\"" + productName + "\")"));
-            return true;
+            return wait.until((ExpectedCondition<Boolean>) d ->
+                    productTitles.stream().anyMatch(title -> title.getText().equals(productName)));
         } catch (TimeoutException e) {
             return false;
         }
@@ -29,10 +41,15 @@ public class CartScreen extends BaseScreen {
 
     /** Texto con la cantidad de ítems, por ejemplo "1 Items". */
     public String getTotalItems() {
-        return waitVisible(TOTAL_ITEMS).getText();
+        return textOf(totalItems);
+    }
+
+    /** Texto con el precio total, por ejemplo "$ 29.99". */
+    public String getTotalPrice() {
+        return textOf(totalPrice);
     }
 
     public void proceedToCheckout() {
-        tap(CHECKOUT_BUTTON);
+        tap(checkoutButton);
     }
 }

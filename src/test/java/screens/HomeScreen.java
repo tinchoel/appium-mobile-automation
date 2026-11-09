@@ -49,6 +49,7 @@ public class HomeScreen extends BaseScreen {
      * porque en las tarjetas del catálogo solo la imagen recibe el click.
      */
     public void selectProduct(String productName) {
+        waitVisible(TITLE); // el catálogo debe estar cargado antes de buscar con scroll
         scrollToText(productName);
         tap(AppiumBy.androidUIAutomator(
                 "new UiSelector().text(\"" + productName + "\")"

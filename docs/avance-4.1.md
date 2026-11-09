@@ -24,7 +24,7 @@ El archivo editable es [`diagrama-clases-pom.dot`](diagrama-clases-pom.dot) (Gra
 
 Cómo se lee:
 
-- **Flecha con triángulo vacío:** herencia. Las cuatro pantallas extienden `BaseScreen`; `CheckoutScreen` va punteada porque se implementa en un próximo avance.
+- **Flecha con triángulo vacío:** herencia. Las cuatro pantallas extienden `BaseScreen`; `CheckoutScreen` estaba solo definida en este avance y se implementó en el Avance 4.3. El diagrama se actualizó en el 4.3 y muestra el estado actual del proyecto.
 - **Flecha punteada con punta abierta:** dependencia (`usa`). Las clases de prueba usan las pantallas, y `BaseTest` crea el driver con `DriverFactory`, que lee `ConfigReader`.
 - **Símbolos:** `#` protegido, `+` público, `-` privado, `~` visibilidad de paquete.
 
@@ -47,7 +47,7 @@ Centraliza lo que todas las pantallas necesitan, para que ninguna lo repita:
 
 **`CartScreen`**: `isProductInCart(productName)`, `getTotalItems()` y `proceedToCheckout()`.
 
-**`CheckoutScreen`** (planificada): `enterShippingAddress(...)`, `clickToPayment()`, `enterPaymentDetails(...)`, `clickReviewOrder()`, `getShippingName()`, `getTotalAmount()`, `clickPlaceOrder()` y `getConfirmationTitle()`.
+**`CheckoutScreen`** (definida aquí e implementada en el Avance 4.3): `enterShippingAddress(...)`, `clickToPayment()`, `enterPaymentDetails(...)`, `clickReviewOrder()`, `getShippingName()`, `getTotalAmount()`, `clickPlaceOrder()` y `getConfirmationTitle()`.
 
 ## 5. Herencia y principios SOLID
 
@@ -127,7 +127,7 @@ public class CheckoutScreen extends BaseScreen {
 }
 ```
 
-`LoginScreen`, `HomeScreen` y `CartScreen` ya están implementadas (ver [`avance-4.2.md`](avance-4.2.md)). `CheckoutScreen` queda definida aquí y se implementa en el avance que la requiera.
+`LoginScreen`, `HomeScreen` y `CartScreen` se implementaron en el [Avance 4.2](avance-4.2.md) y `CheckoutScreen` en el [Avance 4.3](avance-4.3.md), donde también se migró a Page Factory. Los métodos finales de `CheckoutScreen` incluyen además los de lectura de la revisión del pedido.
 
 ## 7. Estructura de paquetes
 
@@ -146,10 +146,11 @@ appium-mobile-automation
         │   │   ├── LoginScreen.java
         │   │   ├── HomeScreen.java
         │   │   ├── CartScreen.java
-        │   │   └── CheckoutScreen.java      (próximo avance)
+        │   │   └── CheckoutScreen.java
         │   └── tests                  clases de prueba y su base
         │       ├── BaseTest.java
         │       ├── FlujoPomTest.java
+        │       ├── CompraPomTest.java
         │       ├── LoginTest.java
         │       ├── LogoutTest.java
         │       ├── CatalogoTest.java

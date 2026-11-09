@@ -1,32 +1,37 @@
 package screens;
 
-import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.AndroidDriver;
-import org.openqa.selenium.By;
+import io.appium.java_client.pagefactory.AndroidFindBy;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-/** Pantalla de Login: ingreso de credenciales y autenticación. */
+/** Pantalla de Login: ingreso de credenciales y autenticación. Elementos declarados con Page Factory. */
 public class LoginScreen extends BaseScreen {
 
-    private static final By USERNAME_FIELD = AppiumBy.id(ID_PREFIX + "nameET");
-    private static final By PASSWORD_FIELD = AppiumBy.id(ID_PREFIX + "passwordET");
-    private static final By LOGIN_BUTTON = AppiumBy.id(ID_PREFIX + "loginBtn");
+    @AndroidFindBy(id = ID_PREFIX + "nameET")
+    private WebElement usernameField;
+
+    @AndroidFindBy(id = ID_PREFIX + "passwordET")
+    private WebElement passwordField;
+
+    @AndroidFindBy(id = ID_PREFIX + "loginBtn")
+    private WebElement loginButton;
 
     public LoginScreen(AndroidDriver driver, WebDriverWait wait) {
         super(driver, wait);
     }
 
     public void enterUsername(String username) {
-        type(USERNAME_FIELD, username);
+        type(usernameField, username);
     }
 
     public void enterPassword(String password) {
-        type(PASSWORD_FIELD, password);
+        type(passwordField, password);
     }
 
     public void clickLogin() {
         hideKeyboard();
-        tap(LOGIN_BUTTON);
+        tap(loginButton);
     }
 
     /** Completa el proceso de autenticación reutilizando los tres métodos anteriores. */
