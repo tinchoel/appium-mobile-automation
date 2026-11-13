@@ -2,27 +2,37 @@ package steps;
 
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import support.TestContext;
 
-/** Pasos del carrito. Temporales: solo imprimen en consola. */
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+/** Pasos del carrito, resueltos con HomeScreen y CartScreen. */
 public class CarritoSteps {
+
+    private final TestContext context;
+
+    public CarritoSteps(TestContext context) {
+        this.context = context;
+    }
 
     @When("agrega el producto al carrito")
     public void agregaElProductoAlCarrito() {
-        System.out.println("[carrito] agrega el producto al carrito");
+        context.home().addProductToCart(context.currentProduct());
     }
 
     @When("abre el carrito")
     public void abreElCarrito() {
-        System.out.println("[carrito] abre el carrito");
+        context.home().clickCart();
     }
 
     @Then("debería visualizar el producto {string} en el carrito")
     public void visualizaElProductoEnElCarrito(String producto) {
-        System.out.println("[carrito] verifica el producto: " + producto);
+        assertTrue(context.cart().isProductInCart(producto), "El carrito debe mostrar " + producto);
     }
 
     @Then("el carrito debería contener {int} ítem")
     public void elCarritoContiene(int cantidad) {
-        System.out.println("[carrito] verifica la cantidad: " + cantidad);
+        String items = context.cart().getTotalItems();
+        assertTrue(items.contains(String.valueOf(cantidad)), "Ítems en el carrito. Se vio: " + items);
     }
 }

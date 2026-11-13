@@ -12,7 +12,7 @@ La consigna habla de "Sauce Demo" con `standard_user` / `secret_sauce`. Esas cre
 
 | Tipo de usuario | Usuario | Contraseña |
 |-----------------|---------|------------|
-| Válido | `bob@example.com` | `10203040` |
+| Válido | `bod@example.com` | `10203040` |
 | Bloqueado | `alice@example.com` | `10203040` |
 
 ## Condición inicial
@@ -46,13 +46,13 @@ Feature: Inicio de sesión en la aplicación
 
   @smoke
   Scenario: Inicio de sesión exitoso
-    When ingresa el usuario "bob@example.com"
+    When ingresa el usuario "bod@example.com"
     And ingresa la contraseña "10203040"
     And presiona el botón de iniciar sesión
     Then debería visualizar el catálogo de productos
 
   Scenario: Inicio de sesión con contraseña incorrecta
-    When ingresa el usuario "bob@example.com"
+    When ingresa el usuario "bod@example.com"
     And ingresa la contraseña "clave-incorrecta"
     And presiona el botón de iniciar sesión
     Then debería permanecer en la pantalla de inicio de sesión

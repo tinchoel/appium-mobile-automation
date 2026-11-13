@@ -3,47 +3,62 @@ package steps;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import support.TestContext;
 
-/** Pasos del login. Por ahora son temporales: solo imprimen en consola. */
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+/** Pasos del login, resueltos con HomeScreen y LoginScreen. */
 public class LoginSteps {
+
+    private final TestContext context;
+
+    public LoginSteps(TestContext context) {
+        this.context = context;
+    }
 
     @Given("que el usuario se encuentra en la pantalla de inicio de sesión")
     public void usuarioEnPantallaDeLogin() {
-        System.out.println("[login] el usuario está en la pantalla de inicio de sesión");
+        context.home().goToLogin();
+        assertTrue(context.login().isDisplayed(), "Debe verse la pantalla de inicio de sesión");
     }
 
     @When("ingresa el usuario {string}")
     public void ingresaElUsuario(String usuario) {
-        System.out.println("[login] usuario: " + usuario);
+        context.login().enterUsername(usuario);
     }
 
     @When("ingresa la contraseña {string}")
     public void ingresaLaContrasena(String contrasena) {
-        System.out.println("[login] contraseña ingresada");
+        context.login().enterPassword(contrasena);
     }
 
     @When("presiona el botón de iniciar sesión")
     public void presionaIniciarSesion() {
-        System.out.println("[login] presiona iniciar sesión");
+        context.login().clickLogin();
     }
 
     @Then("debería visualizar el catálogo de productos")
     public void visualizaElCatalogo() {
-        System.out.println("[login] verifica el catálogo de productos");
+        assertTrue(context.home().isProductScreenDisplayed(), "Debe verse el catálogo de productos");
+        assertEquals("Products", context.home().getProductTitle(), "Título del catálogo");
     }
 
     @Then("debería permanecer en la pantalla de inicio de sesión")
     public void permaneceEnLogin() {
-        System.out.println("[login] verifica que sigue en el login");
+        assertTrue(context.login().isDisplayed(), "Debe seguir visible la pantalla de inicio de sesión");
     }
 
     @Then("debería visualizar un mensaje de error")
     public void visualizaMensajeDeError() {
-        System.out.println("[login] verifica el mensaje de error");
+        String mensaje = context.login().getErrorMessage();
+        assertFalse(mensaje.isBlank(), "Debe mostrarse un mensaje de error");
     }
 
     @Then("debería visualizar un mensaje indicando que el usuario está bloqueado")
     public void visualizaMensajeDeBloqueo() {
-        System.out.println("[login] verifica el mensaje de usuario bloqueado");
+        String mensaje = context.login().getErrorMessage();
+        assertTrue(mensaje.contains("locked out"), "Mensaje de usuario bloqueado. Se vio: " + mensaje);
     }
 }

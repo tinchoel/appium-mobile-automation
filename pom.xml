@@ -61,6 +61,14 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- PicoContainer: comparte el TestContext (driver y pantallas) entre las clases de pasos -->
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-picocontainer</artifactId>
+            <version>${cucumber.version}</version>
+            <scope>test</scope>
+        </dependency>
+
         <!-- JUnit Platform Suite: permite declarar el Runner con @Suite -->
         <dependency>
             <groupId>org.junit.platform</groupId>

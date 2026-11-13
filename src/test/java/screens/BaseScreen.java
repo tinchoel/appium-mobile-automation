@@ -4,8 +4,10 @@ import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -63,7 +65,15 @@ public abstract class BaseScreen {
     // ---------- Esperas y acciones sobre un WebElement de Page Factory ----------
 
     protected WebElement waitVisible(WebElement element) {
-        return wait.until(ExpectedConditions.visibilityOf(element));
+        // Si la pantalla se redibuja mientras se espera (por ejemplo, al aparecer un mensaje de error),
+        // el elemento puede quedar obsoleto: en ese caso se vuelve a intentar en vez de fallar.
+        return wait.until((ExpectedCondition<WebElement>) d -> {
+            try {
+                return element.isDisplayed() ? element : null;
+            } catch (StaleElementReferenceException e) {
+                return null;
+            }
+        });
     }
 
     protected WebElement waitClickable(WebElement element) {

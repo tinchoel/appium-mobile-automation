@@ -13,7 +13,7 @@ Feature: Checkout
     And agrega el producto al carrito
     And abre el carrito
     And inicia el proceso de compra
-    And inicia sesión con el usuario "bob@example.com" y la contraseña "10203040"
+    And inicia sesión con el usuario "bod@example.com" y la contraseña "10203040"
     And completa la dirección de envío
     And completa los datos de pago
     And confirma el pedido
