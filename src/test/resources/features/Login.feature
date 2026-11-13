@@ -51,3 +51,23 @@ Feature: Inicio de sesión en la aplicación
     And presiona el botón de iniciar sesión
     Then debería permanecer en la pantalla de inicio de sesión
     And debería visualizar un mensaje de error
+
+  @multiusuario
+  Scenario Outline: Inicio de sesión con múltiples usuarios
+    When ingresa el usuario "<usuario>"
+    And ingresa la contraseña "<contraseña>"
+    And presiona el botón de iniciar sesión
+    Then debería ver el resultado "<resultado>"
+
+    Examples: Casos que la app resuelve correctamente
+      | usuario           | contraseña | resultado           |
+      | bod@example.com   | 10203040   | catálogo            |
+      | alice@example.com | 10203040   | usuario bloqueado   |
+      |                   | 10203040   | usuario obligatorio |
+      | bod@example.com   |            | mensaje de error    |
+
+    # Defecto conocido de la app: acepta cualquier contraseña (ver @known-issue arriba)
+    @known-issue
+    Examples: Casos con defecto conocido
+      | usuario         | contraseña       | resultado        |
+      | bod@example.com | clave-incorrecta | mensaje de error |

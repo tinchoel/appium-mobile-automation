@@ -21,6 +21,16 @@ public class HomeScreen extends BaseScreen {
     @AndroidFindBy(accessibility = "Login Menu Item")
     private WebElement loginMenuItem;
 
+    @AndroidFindBy(accessibility = "Logout Menu Item")
+    private WebElement logoutMenuItem;
+
+    // Diálogo de confirmación del logout
+    @AndroidFindBy(id = ID_PREFIX + "alertTitle")
+    private WebElement alertTitle;
+
+    @AndroidFindBy(id = "android:id/button1")
+    private WebElement confirmButton;
+
     @AndroidFindBy(accessibility = "Tap to add product to cart")
     private WebElement addToCartButton;
 
@@ -35,6 +45,14 @@ public class HomeScreen extends BaseScreen {
     public void goToLogin() {
         tap(menuButton);
         tap(loginMenuItem);
+    }
+
+    /** Menú lateral -> Log Out -> confirmar en el diálogo. */
+    public void logout() {
+        tap(menuButton);
+        tap(logoutMenuItem);
+        waitForText(alertTitle, "Log Out");
+        tap(confirmButton);
     }
 
     /** true si el catálogo se muestra dentro del tiempo de espera. */

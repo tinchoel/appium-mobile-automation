@@ -24,14 +24,25 @@ public class LoginSteps {
         assertTrue(context.login().isDisplayed(), "Debe verse la pantalla de inicio de sesión");
     }
 
+    @Given("que el usuario inició sesión con el usuario {string} y la contraseña {string}")
+    public void usuarioIniciaSesion(String usuario, String contrasena) {
+        context.home().goToLogin();
+        context.login().login(usuario, contrasena);
+        assertTrue(context.home().isProductScreenDisplayed(), "Después del login debe verse el catálogo");
+    }
+
     @When("ingresa el usuario {string}")
     public void ingresaElUsuario(String usuario) {
-        context.login().enterUsername(usuario);
+        if (!usuario.isEmpty()) { // una celda vacía de un Examples significa "no completar el campo"
+            context.login().enterUsername(usuario);
+        }
     }
 
     @When("ingresa la contraseña {string}")
     public void ingresaLaContrasena(String contrasena) {
-        context.login().enterPassword(contrasena);
+        if (!contrasena.isEmpty()) {
+            context.login().enterPassword(contrasena);
+        }
     }
 
     @When("presiona el botón de iniciar sesión")
@@ -60,5 +71,27 @@ public class LoginSteps {
     public void visualizaMensajeDeBloqueo() {
         String mensaje = context.login().getErrorMessage();
         assertTrue(mensaje.contains("locked out"), "Mensaje de usuario bloqueado. Se vio: " + mensaje);
+    }
+
+    /** Resultado esperado de un Scenario Outline de login: "catálogo", "usuario bloqueado", etc. */
+    @Then("debería ver el resultado {string}")
+    public void veElResultado(String resultado) {
+        switch (resultado) {
+            case "catálogo" -> visualizaElCatalogo();
+            case "usuario bloqueado" -> {
+                permaneceEnLogin();
+                visualizaMensajeDeBloqueo();
+            }
+            case "usuario obligatorio" -> {
+                permaneceEnLogin();
+                String mensaje = context.login().getErrorMessage();
+                assertTrue(mensaje.contains("Username is required"), "Mensaje de usuario obligatorio. Se vio: " + mensaje);
+            }
+            case "mensaje de error" -> {
+                permaneceEnLogin();
+                visualizaMensajeDeError();
+            }
+            default -> throw new IllegalArgumentException("Resultado no reconocido: " + resultado);
+        }
     }
 }
