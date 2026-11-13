@@ -12,7 +12,7 @@ Migrar `CartScreen` y `CheckoutScreen` a **Page Factory**, declarando los elemen
 | `LoginScreen` | Migrada a Page Factory (prerrequisito: el checkout sin sesión pasa por el Login). |
 | `CartScreen` | Migrada: títulos del carrito como `List<WebElement>`, total de ítems, precio total y botón de checkout. |
 | `CheckoutScreen` | Nueva, con Page Factory: dirección de envío, pago, revisión del pedido y confirmación. |
-| `HomeScreen` | Se mantiene con `By` (localizadores dinámicos por nombre de producto). Solo se agregó una espera inicial en `selectProduct`. |
+| `HomeScreen` | Migrada a Page Factory en la parte 4.3b (ver más abajo). |
 | `CompraPomTest` | Nueva prueba del flujo de compra completo con Screen Objects. |
 
 ## Inicialización centralizada
@@ -66,7 +66,13 @@ String total = textOf(totalPrice);
 - **Esperas explícitas:** se mantienen. Los proxies de Page Factory son perezosos (buscan el elemento al usarlo) y `WebDriverWait` ignora `NotFoundException`, por lo que `ExpectedConditions.visibilityOf(WebElement)` funciona. No se usa `Thread.sleep`.
 - **Ids compartidos entre pantallas:** `paymentBtn` se usa en tres pasos, así que se espera por el texto del botón antes de tocarlo. `nameET` es el usuario en Login y el titular en Pago; cada pantalla lo declara por separado.
 - **`List<WebElement>` en el carrito:** permite verificar que el producto esté en el carrito sin depender de la posición.
-- **`HomeScreen` con `By`:** sus localizadores dependen del nombre del producto (dinámicos), que Page Factory no resuelve. Puede migrarse en un avance posterior.
+
+## Parte 4.3b: `HomeScreen` y timeout del decorator
+
+- `HomeScreen` pasa a Page Factory: `title`, `menuButton`, `loginMenuItem`, `addToCartButton` y `cartIcon` se declaran con `@AndroidFindBy`. Con esto todas las pantallas del proyecto usan el mismo patrón.
+- El localizador del producto por nombre sigue siendo un `By` dentro de `selectProduct`, porque depende del texto recibido por parámetro y no se puede declarar en una anotación.
+- `BaseScreen` inicializa con `new AppiumFieldDecorator(driver, Duration.ofSeconds(10))`: si un elemento todavía no está, reintenta hasta 10 s antes de fallar (el valor por defecto es de 1 s). Es el mismo enfoque del repositorio de referencia del curso.
+- La API pública de `HomeScreen` no cambia, así que los tests existentes no se tocan.
 
 ## Cómo ejecutar
 

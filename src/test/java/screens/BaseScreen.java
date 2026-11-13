@@ -9,6 +9,8 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
+
 /**
  * Clase base de todos los Screen Objects: guarda el driver, inicializa los elementos declarados con
  * Page Factory (@AndroidFindBy) y reúne las acciones comunes (esperas explícitas, tap, escritura y scroll).
@@ -24,8 +26,8 @@ public abstract class BaseScreen {
         this.driver = driver;
         this.wait = wait;
         // Prepara los campos anotados con @AndroidFindBy de la pantalla que se está creando.
-        // Los elementos se buscan cuando se usan, no al crear la pantalla.
-        PageFactory.initElements(new AppiumFieldDecorator(driver), this);
+        // Los elementos se buscan cuando se usan, no al crear la pantalla; si no aparecen, reintenta hasta 10 s.
+        PageFactory.initElements(new AppiumFieldDecorator(driver, Duration.ofSeconds(10)), this);
     }
 
     /** Atajo para un resource-id de la app: id("productTV"). */

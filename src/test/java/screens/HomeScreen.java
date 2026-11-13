@@ -2,22 +2,30 @@ package screens;
 
 import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.AndroidDriver;
-import org.openqa.selenium.By;
+import io.appium.java_client.pagefactory.AndroidFindBy;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.util.List;
 
 /** Catálogo de productos (pantalla principal) y detalle del producto. */
 public class HomeScreen extends BaseScreen {
 
     // productTV es el título del catálogo ("Products") y también el nombre en el detalle del producto
-    private static final By TITLE = AppiumBy.id(ID_PREFIX + "productTV");
-    private static final By MENU_BUTTON = AppiumBy.id(ID_PREFIX + "menuIV");
-    private static final By LOGIN_MENU_ITEM = AppiumBy.accessibilityId("Login Menu Item");
-    private static final By ADD_TO_CART_BUTTON = AppiumBy.accessibilityId("Tap to add product to cart");
-    private static final By CART_ICON = AppiumBy.accessibilityId("View cart");
+    @AndroidFindBy(id = ID_PREFIX + "productTV")
+    private WebElement title;
+
+    @AndroidFindBy(id = ID_PREFIX + "menuIV")
+    private WebElement menuButton;
+
+    @AndroidFindBy(accessibility = "Login Menu Item")
+    private WebElement loginMenuItem;
+
+    @AndroidFindBy(accessibility = "Tap to add product to cart")
+    private WebElement addToCartButton;
+
+    @AndroidFindBy(accessibility = "View cart")
+    private WebElement cartIcon;
 
     public HomeScreen(AndroidDriver driver, WebDriverWait wait) {
         super(driver, wait);
@@ -25,14 +33,14 @@ public class HomeScreen extends BaseScreen {
 
     /** Menú lateral -> Log In. */
     public void goToLogin() {
-        tap(MENU_BUTTON);
-        tap(LOGIN_MENU_ITEM);
+        tap(menuButton);
+        tap(loginMenuItem);
     }
 
     /** true si el catálogo se muestra dentro del tiempo de espera. */
     public boolean isProductScreenDisplayed() {
         try {
-            waitForText(TITLE, "Products");
+            waitForText(title, "Products");
             return true;
         } catch (TimeoutException e) {
             return false;
@@ -41,7 +49,7 @@ public class HomeScreen extends BaseScreen {
 
     /** Texto del título: "Products" en el catálogo; el nombre del producto en el detalle. */
     public String getProductTitle() {
-        return waitVisible(TITLE).getText();
+        return waitVisible(title).getText();
     }
 
     /**
@@ -49,12 +57,13 @@ public class HomeScreen extends BaseScreen {
      * porque en las tarjetas del catálogo solo la imagen recibe el click.
      */
     public void selectProduct(String productName) {
-        waitVisible(TITLE); // el catálogo debe estar cargado antes de buscar con scroll
+        waitVisible(title); // el catálogo debe estar cargado antes de buscar con scroll
         scrollToText(productName);
+        // Localizador dinámico: depende del nombre del producto, por eso no se declara con @AndroidFindBy
         tap(AppiumBy.androidUIAutomator(
                 "new UiSelector().text(\"" + productName + "\")"
                         + ".fromParent(new UiSelector().description(\"Product Image\"))"));
-        waitForText(TITLE, productName); // confirma que cambió a la pantalla de detalle
+        waitForText(title, productName); // confirma que cambió a la pantalla de detalle
     }
 
     /** Agrega el producto al carrito. Si todavía no está en su detalle, lo abre primero. */
@@ -62,15 +71,18 @@ public class HomeScreen extends BaseScreen {
         if (!isOnDetailOf(productName)) {
             selectProduct(productName);
         }
-        tap(ADD_TO_CART_BUTTON);
+        tap(addToCartButton);
     }
 
     public void clickCart() {
-        tap(CART_ICON);
+        tap(cartIcon);
     }
 
     private boolean isOnDetailOf(String productName) {
-        List<WebElement> titles = driver.findElements(TITLE);
-        return !titles.isEmpty() && productName.equals(titles.get(0).getText());
+        try {
+            return productName.equals(title.getText());
+        } catch (NoSuchElementException e) {
+            return false;
+        }
     }
 }

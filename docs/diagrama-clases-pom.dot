@@ -20,7 +20,7 @@ digraph UML {
   HomeScreen [label=<
     <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#EAF2FB" COLOR="#2F6DB5">
       <TR><TD ALIGN="CENTER" BORDER="1" SIDES="B"><B>HomeScreen</B></TD></TR>
-      <TR><TD ALIGN="LEFT" BORDER="1" SIDES="B">- TITLE : By<BR ALIGN="LEFT"/>- MENU_BUTTON : By<BR ALIGN="LEFT"/>- LOGIN_MENU_ITEM : By<BR ALIGN="LEFT"/>- ADD_TO_CART_BUTTON : By<BR ALIGN="LEFT"/>- CART_ICON : By<BR ALIGN="LEFT"/></TD></TR>
+      <TR><TD ALIGN="LEFT" BORDER="1" SIDES="B">«@AndroidFindBy»<BR ALIGN="LEFT"/>- title : WebElement<BR ALIGN="LEFT"/>- menuButton : WebElement<BR ALIGN="LEFT"/>- loginMenuItem : WebElement<BR ALIGN="LEFT"/>- addToCartButton : WebElement<BR ALIGN="LEFT"/>- cartIcon : WebElement<BR ALIGN="LEFT"/></TD></TR>
       <TR><TD ALIGN="LEFT">+ HomeScreen(driver, wait)<BR ALIGN="LEFT"/>+ goToLogin() : void<BR ALIGN="LEFT"/>+ isProductScreenDisplayed() : boolean<BR ALIGN="LEFT"/>+ getProductTitle() : String<BR ALIGN="LEFT"/>+ selectProduct(productName) : void<BR ALIGN="LEFT"/>+ addProductToCart(productName) : void<BR ALIGN="LEFT"/>+ clickCart() : void<BR ALIGN="LEFT"/></TD></TR>
     </TABLE>>];
 
