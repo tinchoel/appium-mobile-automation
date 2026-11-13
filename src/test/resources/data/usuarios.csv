@@ -1,0 +1,6 @@
+caso,usuario,contrasena,resultado
+usuario_valido,bod@example.com,10203040,catálogo
+usuario_bloqueado,alice@example.com,10203040,usuario bloqueado
+sin_usuario,,10203040,usuario obligatorio
+sin_contrasena,bod@example.com,,mensaje de error
+clave_incorrecta,bod@example.com,clave-incorrecta,mensaje de error

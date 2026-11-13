@@ -3,7 +3,10 @@ package steps;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import support.CsvReader;
 import support.TestContext;
+
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -11,6 +14,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** Pasos del login, resueltos con HomeScreen y LoginScreen. */
 public class LoginSteps {
+
+    private static final String ARCHIVO_USUARIOS = "data/usuarios.csv";
 
     private final TestContext context;
 
@@ -29,6 +34,14 @@ public class LoginSteps {
         context.home().goToLogin();
         context.login().login(usuario, contrasena);
         assertTrue(context.home().isProductScreenDisplayed(), "Después del login debe verse el catálogo");
+    }
+
+    /** Completa usuario y contraseña con los datos del caso indicado en data/usuarios.csv. */
+    @When("ingresa las credenciales del caso {string}")
+    public void ingresaLasCredencialesDelCaso(String caso) {
+        Map<String, String> datos = CsvReader.row(ARCHIVO_USUARIOS, "caso", caso);
+        ingresaElUsuario(datos.get("usuario"));
+        ingresaLaContrasena(datos.get("contrasena"));
     }
 
     @When("ingresa el usuario {string}")
@@ -73,9 +86,14 @@ public class LoginSteps {
         assertTrue(mensaje.contains("locked out"), "Mensaje de usuario bloqueado. Se vio: " + mensaje);
     }
 
-    /** Resultado esperado de un Scenario Outline de login: "catálogo", "usuario bloqueado", etc. */
-    @Then("debería ver el resultado {string}")
-    public void veElResultado(String resultado) {
+    /** Verifica el resultado esperado que figura en data/usuarios.csv para el caso indicado. */
+    @Then("debería ver el resultado esperado del caso {string}")
+    public void veElResultadoDelCaso(String caso) {
+        verificarResultado(CsvReader.row(ARCHIVO_USUARIOS, "caso", caso).get("resultado"));
+    }
+
+    /** Resultados posibles: "catálogo", "usuario bloqueado", "usuario obligatorio" y "mensaje de error". */
+    private void verificarResultado(String resultado) {
         switch (resultado) {
             case "catálogo" -> visualizaElCatalogo();
             case "usuario bloqueado" -> {

@@ -52,22 +52,22 @@ Feature: Inicio de sesión en la aplicación
     Then debería permanecer en la pantalla de inicio de sesión
     And debería visualizar un mensaje de error
 
+  # Los datos de cada caso (usuario, contraseña y resultado esperado) están en data/usuarios.csv
   @multiusuario
   Scenario Outline: Inicio de sesión con múltiples usuarios
-    When ingresa el usuario "<usuario>"
-    And ingresa la contraseña "<contraseña>"
+    When ingresa las credenciales del caso "<caso>"
     And presiona el botón de iniciar sesión
-    Then debería ver el resultado "<resultado>"
+    Then debería ver el resultado esperado del caso "<caso>"
 
     Examples: Casos que la app resuelve correctamente
-      | usuario           | contraseña | resultado           |
-      | bod@example.com   | 10203040   | catálogo            |
-      | alice@example.com | 10203040   | usuario bloqueado   |
-      |                   | 10203040   | usuario obligatorio |
-      | bod@example.com   |            | mensaje de error    |
+      | caso              |
+      | usuario_valido    |
+      | usuario_bloqueado |
+      | sin_usuario       |
+      | sin_contrasena    |
 
     # Defecto conocido de la app: acepta cualquier contraseña (ver @known-issue arriba)
     @known-issue
     Examples: Casos con defecto conocido
-      | usuario         | contraseña       | resultado        |
-      | bod@example.com | clave-incorrecta | mensaje de error |
+      | caso             |
+      | clave_incorrecta |
