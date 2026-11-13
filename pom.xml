@@ -12,6 +12,7 @@
         <maven.compiler.release>17</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <cucumber.version>7.20.1</cucumber.version>
+        <allure.version>2.29.1</allure.version>
         <junit.version>5.13.4</junit.version>
     </properties>
 
@@ -69,6 +70,14 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Allure Report: plugin de Cucumber que genera los resultados del reporte -->
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-cucumber7-jvm</artifactId>
+            <version>${allure.version}</version>
+            <scope>test</scope>
+        </dependency>
+
         <!-- JUnit Platform Suite: permite declarar el Runner con @Suite -->
         <dependency>
             <groupId>org.junit.platform</groupId>
@@ -84,6 +93,13 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.5.2</version>
+            </plugin>
+
+            <!-- Allure: genera el reporte HTML con "mvn allure:report" o lo abre con "mvn allure:serve" -->
+            <plugin>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-maven</artifactId>
+                <version>2.12.0</version>
             </plugin>
         </plugins>
     </build>
